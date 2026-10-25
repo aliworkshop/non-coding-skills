@@ -43,7 +43,7 @@ Design Academy sends every new signup an email: *"What is your biggest frustrati
 
 Their landing page copy is pulled directly from that sheet — literally the phrases customers wrote. Laura from Design Academy: *"We didn't write that. Our customers wrote that. It was a recurring statement that we heard over and over and over again. All we did was listen."*
 
-Takeaway: Ali's equivalent is mining user feedback, store reviews, Telegram/Reddit/LinkedIn comments, and his own memory of what users and venue owners have said. The copy writes itself once the source material is in hand.
+Takeaway: Ali's equivalent is mining user feedback, store reviews, Telegram/Reddit/LinkedIn comments, and Ali's own memory of what users and venue owners have said. The copy writes itself once the source material is in hand.
 
 ---
 
