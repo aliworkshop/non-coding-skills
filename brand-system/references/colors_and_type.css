@@ -1,0 +1,222 @@
+/* ============================================================
+   Brand — Colors & Typography (template)
+   Drop-in CSS variables + semantic element styles.
+   TODO(ali): every value marked TODO is a neutral placeholder so
+   the file renders today. Replace them with your brand's values;
+   every skill reads these tokens, so this is the only place to
+   change them.
+   ============================================================ */
+
+/* Fonts — Google Fonts CDN.
+   Vazirmatn is the suggested Persian face (covers Latin too).
+   TODO(ali): swap the display/body families when you pick them. */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* --- Brand colors (raw tokens) ----------------------------- */
+  --brand-primary:   #3B6FB6;  /* TODO(ali): the one brand accent — CTAs, links, focus */
+  --brand-secondary: #B23A3A;  /* TODO(ali): rare second accent (wordmark) */
+  --brand-accent:    #7FB547;  /* TODO(ali): "available" / free / live */
+  --brand-warning:   #C9962A;  /* TODO(ali): prices, badges, ratings */
+  --brand-error:     #E0604F;  /* TODO(ali): pain points, errors, AI sender in chats */
+  --brand-success:   #4F9470;  /* TODO(ali): form success */
+  --brand-info:      #3A6F9E;  /* TODO(ali): info */
+
+  /* --- Surfaces (dark theme) --------------------------------- */
+  --brand-base-100: #0B0E14;   /* TODO(ali): dark page bg (never pure #000) */
+  --brand-base-200: oklch(20% 0.02 260);         /* TODO(ali): card bg */
+  --brand-base-300: oklch(27% 0.02 260);         /* TODO(ali): borders / neutral */
+  --brand-base-content: oklch(100% 0 0);           /* white text */
+  --brand-neutral:  oklch(27% 0.02 260);
+
+  /* --- Foreground/text scale (alpha-based on white) ---------- */
+  --fg-1: oklch(100% 0 0);                                  /* primary text (titles) */
+  --fg-2: color-mix(in srgb, white 80%, transparent);       /* strong body */
+  --fg-3: color-mix(in srgb, white 60%, transparent);       /* body copy default */
+  --fg-4: color-mix(in srgb, white 50%, transparent);       /* subdued */
+  --fg-5: color-mix(in srgb, white 40%, transparent);       /* meta / labels */
+  --fg-6: color-mix(in srgb, white 30%, transparent);       /* very subtle */
+  --fg-7: color-mix(in srgb, white 8%,  transparent);       /* dividers */
+
+  /* --- Type families ---------------------------------------- */
+  --font-display: 'Vazirmatn', system-ui, sans-serif;  /* TODO(ali): headings, badges, button labels */
+  --font-body:    'Vazirmatn', system-ui, sans-serif;  /* TODO(ali): body, links, nav */
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;    /* code, meta, durations */
+
+  /* --- Type scale ------------------------------------------- */
+  --fs-display-xl: clamp(2.5rem, 5vw + 1rem, 3.75rem);  /* hero h1   */
+  --fs-display-lg: clamp(2rem, 3vw + 1rem, 2.5rem);     /* section h2 */
+  --fs-h2: 1.875rem;     /* 30px */
+  --fs-h3: 1.5rem;       /* 24px */
+  --fs-h4: 1.125rem;     /* 18px */
+  --fs-body-lg: 1.125rem;
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+  --fs-eyebrow: 0.875rem; /* uppercase eyebrow with 0.2em tracking */
+
+  /* --- Radii ------------------------------------------------ */
+  --radius-box: 0.25rem;        /* code blocks */
+  --radius-lg: 0.5rem;          /* small chips */
+  --radius-xl: 0.75rem;         /* status badges, FAQ items */
+  --radius-card: 1rem;          /* rounded-2xl on cards */
+  --radius-selector: 1rem;      /* checkbox/radio container */
+  --radius-field: 2rem;         /* full-pill buttons & inputs */
+
+  /* --- Spacing rhythm (Tailwind defaults; documented for reference) --- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* --- Elevation -------------------------------------------- */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-card-hover: 0 10px 25px -5px color-mix(in srgb, var(--brand-primary) 8%, transparent);
+
+  /* --- Motion ----------------------------------------------- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+
+  /* --- Overlay accent for video captions ------------------- */
+  --brand-overlay-accent: #6FA8E8;  /* TODO(ali): lighter, brighter primary for captions over footage */
+}
+
+/* ============================================================
+   Semantic element styles
+   ============================================================ */
+
+body {
+  font-family: var(--font-body);
+  background: var(--brand-base-100);
+  color: var(--fg-1);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+h1 { font-size: var(--fs-display-xl); letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-display-lg); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); font-weight: 700; }
+
+p { color: var(--fg-3); text-wrap: pretty; }
+
+a {
+  color: var(--brand-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dur-base) var(--ease-standard);
+}
+a:hover { color: color-mix(in srgb, var(--brand-primary) 80%, white); }
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+pre {
+  background: var(--brand-base-200);
+  padding: 1rem;
+  border-radius: var(--radius-box);
+  overflow-x: auto;
+}
+
+/* ============================================================
+   Reusable utilities (paste-ready)
+   ============================================================ */
+
+/* Eyebrow label — cap-tracked display font, used above hero/section titles */
+.eyebrow {
+  font-family: var(--font-display);
+  color: var(--brand-primary);
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Mono meta text — used for tiny labels, "free", durations, version stamps */
+.meta-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-5);
+  letter-spacing: 0.02em;
+}
+
+/* Highlight underline — used in hero "Big Things" treatment */
+.highlight {
+  position: relative;
+  display: inline-block;
+  padding: 0 0.06em;
+}
+.highlight::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0.03em 0;
+  height: 0.25em;
+  background: color-mix(in srgb, var(--brand-primary) 90%, transparent);
+  z-index: -1;
+}
+
+/* Hero radial glow — the one and only gradient on marketing surfaces */
+.hero-glow {
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, color-mix(in srgb, var(--brand-primary) 12%, transparent) 0%, transparent 70%);
+}
+
+/* Card base — every card on the marketing site inherits from this */
+.brand-card {
+  background: var(--brand-base-200);
+  border: 1px solid var(--brand-base-300);
+  border-radius: var(--radius-card);
+  transition: border-color var(--dur-base), box-shadow var(--dur-base);
+}
+.brand-card:hover {
+  border-color: color-mix(in srgb, var(--brand-primary) 50%, transparent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Primary CTA pill */
+.btn-primary {
+  background: var(--brand-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-field);
+  padding: 14px 28px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: background var(--dur-base);
+}
+.btn-primary:hover { background: color-mix(in srgb, var(--brand-primary) 88%, white); }
+
+/* ============================================================
+   Persian / RTL
+   ============================================================ */
+
+/* Persian text: no tracking (it breaks letter joins), a little more leading. */
+:lang(fa), [dir="rtl"] {
+  font-family: 'Vazirmatn', var(--font-body);
+  letter-spacing: 0;
+  line-height: 1.8;
+}
+:lang(fa) h1, :lang(fa) h2, :lang(fa) h3, :lang(fa) h4,
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4,
+:lang(fa) .eyebrow, [dir="rtl"] .eyebrow {
+  font-family: 'Vazirmatn', var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.4;
+}
