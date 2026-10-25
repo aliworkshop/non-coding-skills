@@ -1,0 +1,103 @@
+// LinkedIn Post Analytics — Impressions View Scraper
+// Run via javascript_tool on a LinkedIn analytics page with metricType=IMPRESSIONS
+//
+// Wrapped in async IIFE with built-in page-load delay so it works
+// directly in javascript_tool without top-level await errors.
+//
+// DOM pattern (as of mid-2026):
+//   Each post is an <li> inside <main> containing an <a href="/feed/update/...">
+//   Metrics are short <span> elements (< 30 chars) matching number patterns
+//   In impressions view, standalone numbers are: [reactions, impressions]
+//   Text-containing metrics: "X comments", "X reposts"
+//   The post's activity ID is in the link href: /feed/update/urn:li:activity:<id>/
+//   The post's age is inside the byline span: "<Name> posted this • 2w" (English UI)
+//
+// This scraper captures activityId and age in addition to the metrics, because
+// the engagement-rate workflow needs both: activityId to merge with the
+// engagements view, and age to filter to posts created inside the window.
+//
+// AGE-UNIT GOTCHA: LinkedIn writes months as "mo" and minutes as "m". When you
+// match units with a regex alternation, "mo" and "yr" MUST come before "m",
+// otherwise "10mo" matches the "m" branch first and is read as "10m" (10
+// minutes) — silently letting a months-old post pass a same-day/week window
+// filter and corrupting its engagement rate. Order the alternation mo|yr|...|m.
+//
+// NOTE: This view does NOT reliably surface repost counts. Always pair with
+// the engagements view scraper to get totalEngagements for rate analysis.
+
+(async () => {
+  await new Promise(r => setTimeout(r, 3000));
+
+  // Sanitize preview text — strip URLs and special chars that can trigger
+  // Chrome tool content filters ([BLOCKED: Cookie/query string data])
+  const sanitize = (text) =>
+    text.replace(/https?:\/\/\S+/g, '[url]').replace(/[^\w\s\u0600-\u06FF\u200C.,!?'\-:;@#]/g, '');
+
+  const allLinks = document.querySelectorAll('main li > a[href*="/feed/update/"]');
+  const data = [];
+
+  allLinks.forEach(link => {
+    const li = link.closest('li');
+    const href = link.getAttribute('href') || '';
+    const idMatch = href.match(/urn:li:activity:(\d+)/);
+    const activityId = idMatch ? idMatch[1] : null;
+
+    const allSpans = li.querySelectorAll('span');
+    const spanTexts = Array.from(allSpans).map(s => s.innerText.trim()).filter(t => t);
+
+    // Age lives inside the byline span ("... posted this • 2w"), not a standalone
+    // span. Match mo|yr before m so months aren't truncated to minutes.
+    let age = null;
+    for (const t of spanTexts) {
+      const m = t.match(/posted this\s*[•·]\s*(now|\d+\s*(?:mo|yr|s|m|h|d|w))/i);
+      if (m) { age = m[1].replace(/\s+/g, ''); break; }
+    }
+
+    const postText = Array.from(allSpans).find(s => s.innerText.length > 80);
+    const preview = postText ? sanitize(postText.innerText.substring(0, 60)) : 'N/A';
+
+    // Filter to metric-bearing spans only
+    const metricSpans = spanTexts.filter(t =>
+      t.length < 30 && (/^[\d,]+$/.test(t) || /^\d+\s+(comment|repost)/i.test(t))
+    );
+
+    let reactions = 0, comments = 0, reposts = 0, impressions = 0;
+    const commentMatch = metricSpans.find(m => /comment/i.test(m));
+    const repostMatch = metricSpans.find(m => /repost/i.test(m));
+    if (commentMatch) comments = parseInt(commentMatch);
+    if (repostMatch) reposts = parseInt(repostMatch);
+
+    const nums = metricSpans.filter(m => /^[\d,]+$/.test(m)).map(n => parseInt(n.replace(/,/g, '')));
+    if (nums.length >= 2) { reactions = nums[0]; impressions = nums[1]; }
+    else if (nums.length === 1) { impressions = nums[0]; }
+
+    const totalEng = reactions + comments + reposts;
+    const engRate = impressions > 0 ? ((totalEng / impressions) * 100).toFixed(1) : '0';
+
+    data.push({ activityId, age, preview, reactions, comments, reposts, impressions, totalEng, engRate });
+  });
+
+  // Persist so a later merge survives navigation to the engagements view.
+  // Navigating to another URL wipes window.* globals; localStorage survives it.
+  try { localStorage.setItem('__imprData', JSON.stringify(data)); } catch (e) {}
+  window.__impr = data;
+
+  // Format output
+  const totalImpr = data.reduce((s, d) => s + d.impressions, 0);
+  const totalEng = data.reduce((s, d) => s + d.totalEng, 0);
+  const avgEngRate = totalImpr > 0 ? ((totalEng / totalImpr) * 100).toFixed(2) : '0';
+
+  let out = `${data.length} posts | ${totalImpr.toLocaleString()} total impressions | ${totalEng.toLocaleString()} total engagements | ${avgEngRate}% avg eng rate\n\n`;
+
+  out += `TOP 20 BY IMPRESSIONS:\n`;
+  data.slice(0, 20).forEach((d, i) => {
+    out += `${i + 1}. ${d.impressions.toLocaleString()} impr | ${d.engRate}% eng | ${d.reactions}r/${d.comments}c/${d.reposts}s | ${d.age || '?'} — "${d.preview}"\n`;
+  });
+
+  out += `\nBOTTOM 10:\n`;
+  data.slice(-10).forEach((d, i) => {
+    out += `${data.length - 9 + i}. ${d.impressions.toLocaleString()} impr | ${d.engRate}% eng — "${d.preview}"\n`;
+  });
+
+  return out;
+})();
