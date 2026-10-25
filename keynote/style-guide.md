@@ -1,0 +1,65 @@
+## Presentation Style Guide
+
+`TODO(ali):` this is the inherited default style (white, bold, monochrome, three-part arc). Replace
+any rule that doesn't match how you present, and add your name/handle for title slides. Until
+then, follow it as written, and use `brand-system` tokens when a deck should carry your brand.
+
+**Persian decks.** Write the copy in Persian (`bilingual-copy`), right-align Persian text, and set
+a Persian font that is installed on the presenting machine (Vazirmatn is the suggestion; Keynote
+falls back silently to a system face if it's missing). Citation markers and page numbers move to
+the bottom-right.
+
+### Visual Design
+- **White background, black text, always.** No gradients, no colored backgrounds, no dark themes.
+- Heavy-weight sans-serif font. Titles are huge and bold.
+- Monochrome by default — color only enters via emojis, screenshots, logos, or occasional accent text (red/green for pros/cons).
+- Author name in small bold at bottom-left of title slides, centered footer on content slides. Bracketed references `[1-3]` in bottom-left.
+
+### Reference citation markers (exact spec)
+On content slides, citations are small bracketed markers in the bottom-left, flush to the footer line:
+- **Position `{95, 1027}`** (the x=95 content left margin, sitting on the footer band, next to the page number), **font `HelveticaNeue-Bold` at size 24** (bold, not regular), default black. Width ~38 for a single `[n]`; widen to ~61 for a range.
+- **Gotcha:** creating the text item with a `height` property shifts the stored y up ~52px (e.g. you ask for 1027 and get 975). After `make new text item`, explicitly `set position of <item> to {95, 1027}` and `set font ... to "HelveticaNeue-Bold"` — don't rely on creation-time position.
+- Markers can **combine refs as a range** on one slide: `[1-2]`, `[2-3]`.
+- **Number by first appearance** — the marker numbers must ascend in slide order (first cited ref = `[1]`). When adding markers, renumber the References-slide list to match.
+- The **References slide** itself lists `[n] Title` lines at position `{~95-100, 280}`, **font size 48**, one blank line between entries.
+- Do NOT float markers up at e.g. y=965 or use size 28 — that reads as content, not a citation.
+
+### Title Slide Formula
+Big bold title + lighter subtitle + name at bottom-left + optional thematic graphic (emojis, logos) at bottom-right.
+
+### Narrative Structure
+Every deck follows a **three-part narrative arc** before the tutorial/example section. The specific framing adapts to the topic:
+
+- **What → Why → How** — for tool/product tutorials (e.g., Claude Code: what is it → why it matters → the tutorial)
+- **Status Quo → Problem → Solution** — for introducing new concepts (e.g., MAS: agents are good now → single agents hit limits → multi-agent systems)
+
+The arc always flows into a concrete example/tutorial that shows the idea in action.
+
+### Signature Slide Types
+1. **Definition** — Bold term + one-line plain-English explanation + visual below
+2. **Concept diagram** — Flowcharts built from emojis, arrows, and simple icons (not polished vector art)
+3. **Comparison** — Two-column layout split by a vertical line
+4. **Code walkthrough** — IDE/terminal screenshots with a short label ("Create Server", "Load Model")
+5. **Numbered framework** — "N Things/Rules/Architectures" as the structural backbone
+6. **Takeaways** — Bulleted list with **bolded key phrases**
+
+### Content Patterns
+- **Plain-English definitions** — always one line, jargon-free, even for deep technical topics
+- **Progressive reveal** — concepts built up one element per slide transition
+- **Numbered frameworks** everywhere — "3 Levels", "4 Architectures", "5 Rules of Thumb"
+- **Every concept gets a concrete example** with a named project and step-by-step code walkthrough
+- **Every content slide gets a subtitle** — synthesize one from context if not explicitly provided.
+- **Match the outline exactly** — one major bullet = one slide. Sub-bullets become on-slide content (subtitle, body bullets), NOT separate slides. Don't expand, split, add, remove, or restructure. If the outline has 10 major bullets, the deck should have ~10 content slides (plus title).
+- **Don't use Section layouts** unless the user explicitly requests section dividers. Default to Title Only for all content slides.
+- **No newline characters in titles** — keep titles on a single line. If a title is long, shorten it.
+- **Emojis as visual vocabulary** — robot = LLM/agent, screwdriver = tools, brain = memory, lightbulb = ideas, speech bubble = chat
+- **Pros/cons** with green checkmark / red X
+- **"What's Next?"** slide teasing the next video in the series
+
+### Deck Structure
+Title → (Outline) → **Three-Part Narrative Arc** → Example Walkthrough → Demo → Limitations → Takeaways → What's Next → References → (Appendix)
+
+### Density & Tone
+- One idea per slide. Very low text density. Visuals do the heavy lifting.
+- 14-30 slides typical. Practical over theoretical. Honest about tradeoffs.
+- Audience varies by topic — technical builders, non-technical leaders, or technical entrepreneurs.

@@ -1,0 +1,38 @@
+# Logo library — graphic-builder
+
+Running index of bundled logos. Before fetching anything from the web, check this list and `ls logos/`. If you fetch a new asset, **add a line here** — without an entry, the file is invisible to future runs.
+
+Format: `filename — source, brand color (if applicable), date added`
+
+## logos/
+
+- `claude.png` — lobehub `claude-color.png`, Anthropic orange, 2026-05-13
+- `gmail.png` — Wikimedia Commons 500px thumb, multicolor, 2026-05-13
+- `google-calendar.png` — Wikimedia Commons 500px thumb, multicolor, 2026-05-13
+- `trello.svg` — simpleicons.org, #000000 (black), 2026-10-25
+- `stripe.svg` — simpleicons.org, #635BFF, 2026-05-13
+- `jira.svg` — simpleicons.org, #0052CC (Atlassian blue), 2026-05-13
+- `chrome.svg` — simpleicons.org (googlechrome), monochrome single-path (recolor via `currentColor`), 2026-06-24
+- `claude.svg` — simpleicons.org, monochrome single-path (recolor via `currentColor`); complements full-color `claude.png`, 2026-06-24
+
+## How to add a new logo
+
+See SKILL.md § "Asset library" for the full source priority. Quick reference:
+
+| Need | Source | Pattern |
+|---|---|---|
+| AI brand logo (Claude, GPT, Gemini…) | lobehub | `https://unpkg.com/@lobehub/icons-static-png@latest/light/<name>-color.png` |
+| SaaS / app logo (Trello, Stripe, Slack…) | simpleicons.org | `https://cdn.simpleicons.org/<slug>/<hex-no-hash>` |
+| Google / Microsoft / niche | Wikimedia Commons | `…/thumb/<x>/<xy>/<File.svg>/500px-<File.svg>.png` with descriptive UA |
+
+After fetching:
+1. Save to `logos/<name>.<ext>`.
+2. Copy into the project's local `assets/` folder.
+3. Append a line here.
+4. Verify with `file <path>` — should report PNG or SVG, not HTML/ASCII (those are error pages).
+slack — simpleicons.org #4A154B, 2026-05-17
+slack — Wikimedia Commons (Slack_icon_2019.svg), multicolor, 2026-05-17
+keynote — Wikimedia Commons (Keynote 15.1 application icon), macOS app icon (blue), 2026-05-25
+youtube — Wikimedia Commons (YouTube full-color icon 2017), brand red #FF0000, 2026-05-25
+google-analytics — Wikimedia Commons (Logo Google Analytics), icon mark cropped from wordmark, orange/yellow, 2026-05-25
+google-drive — Wikimedia Commons (Google Drive icon 2020), multicolor, 2026-06-24
